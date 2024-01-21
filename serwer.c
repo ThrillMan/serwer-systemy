@@ -6,20 +6,30 @@
 #include <string.h>
 int main(){
     int mid = msgget(0x123, 0600 | IPC_CREAT);
+
+    int clientsIdSubject[5][5];//every clients writes what subject they are interested in
+    int subjects[5];
+    int numOfsubjects=0;
+
     struct msgbuf
     {
+    int subject;
     int id;
+    char name[20];
     char text[1024];
     } my_msg;
-//     strcpy(my_msg.text, "Hello world");
-//     my_msg.type =2;
-//     msgsnd(mid, &my_msg, strlen(my_msg.text)+1, 0);
+
+
+
+
     while(1){
     msgrcv(mid, &my_msg, sizeof(my_msg), 0, 0);
-    printf("dostalem od klienta o id:%d wiadomosc:%s\n",my_msg.id,my_msg.text);
+    printf("dostalem od klienta o id:%d, imieniu:%s wiadomosc:%s\n",my_msg.id,my_msg.name,my_msg.text);
 
-    //my_msg.id=my_msg.id;
-    //msgsnd(mid, &my_msg, sizeof(my_msg), 0);
+    msgsnd(my_msg.id, &my_msg, sizeof(my_msg), 0);
+
+
+
    }
 
 }
