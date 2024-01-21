@@ -10,15 +10,16 @@ int main(){
     {
     int id;
     char text[1024];
-    } my_msg;    my_msg.id =0;
+    } my_msg;
 //     strcpy(my_msg.text, "Hello world");
 //     my_msg.type =2;
 //     msgsnd(mid, &my_msg, strlen(my_msg.text)+1, 0);
     while(1){
     msgrcv(mid, &my_msg, sizeof(my_msg), 0, 0);
-    printf("dostalem od klienta:%s\n",my_msg.text);
-    my_msg.id=my_msg.id;
-    msgsnd(mid, &my_msg, sizeof(my_msg), 0);
+    printf("dostalem od klienta o id:%d wiadomosc:%s\n",my_msg.id,my_msg.text);
+
+    //my_msg.id=my_msg.id;
+    //msgsnd(mid, &my_msg, sizeof(my_msg), 0);
    }
 
 }
