@@ -12,7 +12,6 @@ int main(){
     printf("kluczem jest%d\n",mid);
      struct msgbuf
     {
-    int subject;
     int id;
     char name[20];
     char text[1024];
@@ -21,19 +20,20 @@ int main(){
     //name
     printf("Podaj imie:");
     fgets(my_msg.name,20,stdin);
-    printf("Podaj id temat <0,4>:");
+    //printf("Podaj id temat <0,4>:");
     //scanf("%d\n",&my_msg.subject);
-    char temp[20];
-    fgets(temp,20,stdin);
-    my_msg.subject=atoi(temp);
-    printf("Wybrany subject:%d",my_msg.subject);
+//     char temp[20];
+//     fgets(temp,20,stdin);
+//     my_msg.subject=atoi(temp);
+//     printf("Wybrany subject:%d",my_msg.subject);
     //subject
-        while(1){
     printf("\npodaj wiadomosc do serwera:");
     fgets(my_msg.text,1024,stdin);
     printf("\nwiad do serwera:%s\n",my_msg.text);
     msgsnd(idOfServer, &my_msg, sizeof(my_msg), 0);
     printf("koniec wiadomosci\n");
+        while(1){
+
     msgrcv(mid, &my_msg, 1024, 0, 0);
     printf("wiadomosc od serwera:%s\n",my_msg.text);
     }
