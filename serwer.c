@@ -5,7 +5,7 @@
 #include <ctype.h>
 #include <string.h>
 int main(){
-    int mid = msgget(0x123, 0600 | IPC_CREAT);
+    int mid = msgget(0x123, 0666 | IPC_CREAT);
 
     int clientsId[5]={0,0,0,0,0};
     int numOfclients=0;
@@ -41,9 +41,8 @@ int main(){
     }
     for(int i = 0; i<numOfclients;i++){
         printf("klient id:%d\n",clientsId[i]);
-        printf("in\n");
         my_msg.id=clientsId[i];
-        msgsnd(clientsId[i], &my_msg, sizeof(my_msg), 0);
+        msgsnd(msgget(clientsId[i], 0666 | IPC_CREAT), &my_msg, sizeof(my_msg), 0);
     }
     //msgsnd(my_msg.id, &my_msg, sizeof(my_msg), 0);
 
