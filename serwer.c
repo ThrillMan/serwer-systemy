@@ -9,12 +9,14 @@ int main(){
     int idOfServer = msgget(0x123, 0666 | IPC_CREAT);
 
     int clientsId[5]={0,0,0,0,0};
+    int clientsChatroom[5]={0,0,0,0,0};
     int numOfclients=0;
 
     struct msgbuf
     {
     long mtype;
     int id;
+    int subject;
     char name[20];
     char text[1024];
     } my_msg;
@@ -23,8 +25,8 @@ int main(){
 
 
     while(1){
-    msgrcv(idOfServer, &my_msg, sizeof(my_msg), 2, 0);
-    printf("dostalem od klienta o id:%d, imieniu:%s wiadomosc:%s\n",my_msg.id,my_msg.name,my_msg.text);
+    msgrcv(idOfServer, &my_msg, sizeof(my_msg), 10, 0);
+    printf("dostalem od klienta o typie:%d, imieniu:%s wiadomosc:%s\n",my_msg.subject,my_msg.name,my_msg.text);
 
     int notThere = 1;
     for(int i = 0; i<=numOfclients;i++){
@@ -39,6 +41,7 @@ int main(){
 
     if(notThere){
         clientsId[numOfclients]=my_msg.id;
+        //clientsChatroom[numOfclients]=my_msg.subject;
         numOfclients++;
     }
 //     for(int i = 0; i<numOfclients;i++){
@@ -49,7 +52,7 @@ int main(){
 //     }
 
     for(int i=0;i<numOfclients;i++){
-        my_msg.mtype =1;
+        my_msg.mtype =my_msg.subject;
         msgsnd(idOfServer, &my_msg, sizeof(my_msg), 0);
 
     }
