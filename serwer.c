@@ -50,7 +50,6 @@ int main(){
 
     for(int i=0;i<numOfclients;i++){
         my_msg.mtype =1;
-        printf("powinno dwa razy nie\n");
         msgsnd(idOfServer, &my_msg, sizeof(my_msg), 0);
 
     }
