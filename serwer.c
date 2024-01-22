@@ -1,30 +1,32 @@
 #include<stdio.h>
+#include<stdlib.h>
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/msg.h>
-#include <ctype.h>
 #include <string.h>
+#include <unistd.h>
 int main(){
-    int mid = msgget(0x123, 0666 | IPC_CREAT);
+    int idOfServer = msgget(0x123, 0666 | IPC_CREAT);
 
     int clientsId[5]={0,0,0,0,0};
     int numOfclients=0;
 
     struct msgbuf
     {
+    long mtype;
     int id;
     char name[20];
     char text[1024];
     } my_msg;
 
-
+    my_msg.mtype =1;
 
 
     while(1){
-    msgrcv(mid, &my_msg, sizeof(my_msg), 0, 0);
+    msgrcv(idOfServer, &my_msg, sizeof(my_msg), 2, 0);
     printf("dostalem od klienta o id:%d, imieniu:%s wiadomosc:%s\n",my_msg.id,my_msg.name,my_msg.text);
 
-    int notThere = 1;
+    /*int notThere = 1;
     for(int i = 0; i<=numOfclients;i++){
         if(my_msg.id!=clientsId[i]){
             notThere =1;
@@ -42,10 +44,18 @@ int main(){
     for(int i = 0; i<numOfclients;i++){
         printf("klient id:%d\n",clientsId[i]);
         my_msg.id=clientsId[i];
+        my_msg.mtype =1;
         msgsnd(msgget(clientsId[i], 0666 | IPC_CREAT), &my_msg, sizeof(my_msg), 0);
-    }
-    //msgsnd(my_msg.id, &my_msg, sizeof(my_msg), 0);
+    }*/
 
+    for(int i=0;i<2;i++){
+        if(fork()==0){
+            my_msg.mtype =1;
+            printf("powinno dwa razy nie\n");
+            msgsnd(idOfServer, &my_msg, sizeof(my_msg), 0);
+        }
+
+    }
 
 
    }
