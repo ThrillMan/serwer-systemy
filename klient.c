@@ -21,22 +21,29 @@ int main(){
     my_msg.id =clientKey;
     my_msg.mtype =2;
     //name
-    printf("Podaj imie:\n");
+    printf("Podaj imie:");
     fgets(my_msg.name,20,stdin);
-
+    printf("\n");
 
 
 if(fork()==0){
         while(1){
             if(msgrcv(idOfServer, &my_msg, sizeof(my_msg), 1, 0)!=-1){
-                printf("\nwiadomosc otrzymana od serwera:%s\n",my_msg.text);
+                my_msg.name[strcspn(my_msg.name,"\n")]=0;
+                if(my_msg.id!=clientKey){
+                printf("%s:%s\n",my_msg.name,my_msg.text);
+                }
             }
         }
     }
 else{
         while(1){
-            printf("\npodaj wiadomosc do serwera:\n");
+            //printf("\npodaj wiadomosc do serwera:\n");
+//             my_msg.name[strcspn(my_msg.name,"\n")]=0;
+//             printf("%s:",my_msg.name);
             fgets(my_msg.text,1024,stdin);
+
+            printf("\n");
             //printf("\nwiad do serwera:%s\n",my_msg.text);
             my_msg.mtype =2;
             msgsnd(idOfServer, &my_msg, sizeof(my_msg), 0);
