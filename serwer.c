@@ -26,7 +26,7 @@ int main(){
     msgrcv(idOfServer, &my_msg, sizeof(my_msg), 2, 0);
     printf("dostalem od klienta o id:%d, imieniu:%s wiadomosc:%s\n",my_msg.id,my_msg.name,my_msg.text);
 
-    /*int notThere = 1;
+    int notThere = 1;
     for(int i = 0; i<=numOfclients;i++){
         if(my_msg.id!=clientsId[i]){
             notThere =1;
@@ -41,19 +41,17 @@ int main(){
         clientsId[numOfclients]=my_msg.id;
         numOfclients++;
     }
-    for(int i = 0; i<numOfclients;i++){
-        printf("klient id:%d\n",clientsId[i]);
-        my_msg.id=clientsId[i];
-        my_msg.mtype =1;
-        msgsnd(msgget(clientsId[i], 0666 | IPC_CREAT), &my_msg, sizeof(my_msg), 0);
-    }*/
+//     for(int i = 0; i<numOfclients;i++){
+//         printf("klient id:%d\n",clientsId[i]);
+//         my_msg.id=clientsId[i];
+//         my_msg.mtype =1;
+//         msgsnd(msgget(clientsId[i], 0666 | IPC_CREAT), &my_msg, sizeof(my_msg), 0);
+//     }
 
-    for(int i=0;i<2;i++){
-        if(fork()==0){
-            my_msg.mtype =1;
-            printf("powinno dwa razy nie\n");
-            msgsnd(idOfServer, &my_msg, sizeof(my_msg), 0);
-        }
+    for(int i=0;i<numOfclients;i++){
+        my_msg.mtype =1;
+        printf("powinno dwa razy nie\n");
+        msgsnd(idOfServer, &my_msg, sizeof(my_msg), 0);
 
     }
 
