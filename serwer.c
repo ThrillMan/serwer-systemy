@@ -28,6 +28,18 @@ int main(){
     msgrcv(idOfServer, &my_msg, sizeof(my_msg), 10, 0);
     printf("dostalem od klienta o typie:%d, imieniu:%s wiadomosc:%s\n",my_msg.subject,my_msg.name,my_msg.text);
 
+    int newRoom = 0;//otherwise room number
+    if(clientsChatroom[my_msg.subject-1]==0){
+        newRoom = my_msg.subject;
+        struct msgbuf anc;
+        strcpy(anc.name,"serwer");
+        sprintf(anc.text, "utworzono pokoj o numerze:%d\n",newRoom);
+        for(int i=0;i<numOfclients;i++){
+                anc.mtype =clientsChatroom[i];
+                msgsnd(idOfServer, &anc, sizeof(anc), 0);
+            }
+    }
+
     int notThere = 1;
     for(int i = 0; i<=numOfclients;i++){
         if(my_msg.id!=clientsId[i]){
@@ -50,8 +62,6 @@ int main(){
             my_msg.mtype =my_msg.subject;
             msgsnd(idOfServer, &my_msg, sizeof(my_msg), 0);
         }
-
-
     }
 
 
