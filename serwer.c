@@ -41,19 +41,16 @@ int main(){
 
     if(notThere){
         clientsId[numOfclients]=my_msg.id;
-        //clientsChatroom[numOfclients]=my_msg.subject;
+        clientsChatroom[numOfclients]=my_msg.subject;
         numOfclients++;
     }
-//     for(int i = 0; i<numOfclients;i++){
-//         printf("klient id:%d\n",clientsId[i]);
-//         my_msg.id=clientsId[i];
-//         my_msg.mtype =1;
-//         msgsnd(msgget(clientsId[i], 0666 | IPC_CREAT), &my_msg, sizeof(my_msg), 0);
-//     }
 
     for(int i=0;i<numOfclients;i++){
-        my_msg.mtype =my_msg.subject;
-        msgsnd(idOfServer, &my_msg, sizeof(my_msg), 0);
+        if(clientsChatroom[i]==my_msg.subject){
+            my_msg.mtype =my_msg.subject;
+            msgsnd(idOfServer, &my_msg, sizeof(my_msg), 0);
+        }
+
 
     }
 
