@@ -41,6 +41,10 @@ int main(){
     strcpy(clientName, my_msg.name);
     //strcpy(clientText, text);
 
+
+    my_msg.mtype =10;
+    strcpy(my_msg.text, "/connected");
+    msgsnd(idOfServer, &my_msg, sizeof(my_msg), 0);
 if(fork()==0){
         while(1){
             my_msg.mtype=clientSubject;
