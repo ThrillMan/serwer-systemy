@@ -28,41 +28,56 @@ int main(){
     msgrcv(idOfServer, &my_msg, sizeof(my_msg), 10, 0);
     printf("dostalem od klienta o typie:%d, imieniu:%s wiadomosc:%s\n",my_msg.subject,my_msg.name,my_msg.text);
 
-    int newRoom = 0;//otherwise room number
-    if(clientsChatroom[my_msg.subject-1]==0){
-        newRoom = my_msg.subject;
-        struct msgbuf anc;
-        strcpy(anc.name,"serwer");
-        sprintf(anc.text, "utworzono pokoj o numerze:%d\n",newRoom);
-        for(int i=0;i<numOfclients;i++){
-                anc.mtype =clientsChatroom[i];
-                msgsnd(idOfServer, &anc, sizeof(anc), 0);
+    if(!strcmp(my_msg.text,"/connected")){
+        printf("if\n");
+        int notThere = 1;
+        for(int i = 0; i<=numOfclients;i++){
+            if(my_msg.id!=clientsId[i]){
+                notThere =1;
             }
-    }
-
-    int notThere = 1;
-    for(int i = 0; i<=numOfclients;i++){
-        if(my_msg.id!=clientsId[i]){
-            notThere =1;
+            else{
+                notThere = 0;
+                break;
+            }
         }
-        else{
-            notThere = 0;
-            break;
-        }
-    }
 
-    if(notThere){
-        clientsId[numOfclients]=my_msg.id;
+        if(notThere){
+            clientsId[numOfclients]=my_msg.id;
+            int newSubject = 1;
+            for(int j =0;j<numOfclients;j++){
+                if(my_msg.subject==clientsChatroom[j]){
+                    newSubject=0;
+                    break;
+                }
+
+                //else if(my_msg.subject!=clientsChatroom[j]&&j+1==numOfclients)newSubject=1;
+            }
+            if(newSubject){
+                strcpy(my_msg.name,"server");
+                //strcpy(my_msg.text,"otworzono pokoj");
+                sprintf(my_msg.text, "utworzono pokoj o numerze:%d\n",my_msg.subject);
+                 for(int i=0;i<numOfclients;i++){
+                     my_msg.mtype =clientsChatroom[i];
+                     msgsnd(idOfServer, &my_msg, sizeof(my_msg), 0);
+             }
+
+        }
         clientsChatroom[numOfclients]=my_msg.subject;
-        numOfclients++;
+            numOfclients++;
     }
-
-    for(int i=0;i<numOfclients;i++){
+    }
+    else{
+        printf("else\n");
+        for(int i=0;i<numOfclients;i++){
         if(clientsChatroom[i]==my_msg.subject){
+
             my_msg.mtype =my_msg.subject;
             msgsnd(idOfServer, &my_msg, sizeof(my_msg), 0);
         }
     }
+
+    }
+
 
 
    }
