@@ -29,7 +29,6 @@ int main(){
     printf("dostalem od klienta o typie:%d, imieniu:%s wiadomosc:%s\n",my_msg.subject,my_msg.name,my_msg.text);
 
     if(!strcmp(my_msg.text,"/connected")){
-        printf("if\n");
         int notThere = 1;
         for(int i = 0; i<=numOfclients;i++){
             if(my_msg.id!=clientsId[i]){
@@ -50,11 +49,9 @@ int main(){
                     break;
                 }
 
-                //else if(my_msg.subject!=clientsChatroom[j]&&j+1==numOfclients)newSubject=1;
             }
             if(newSubject){
                 strcpy(my_msg.name,"server");
-                //strcpy(my_msg.text,"otworzono pokoj");
                 sprintf(my_msg.text, "utworzono pokoj o numerze:%d\n",my_msg.subject);
                  for(int i=0;i<numOfclients;i++){
                      my_msg.mtype =clientsChatroom[i];
@@ -66,12 +63,7 @@ int main(){
             numOfclients++;
     }
     }
-    else if(!strcmp(my_msg.text,"/block")){
-        my_msg.mtype =my_msg.subject;
-        msgsnd(idOfServer, &my_msg, sizeof(my_msg), 0);
-    }
     else{
-        printf("else\n");
         for(int i=0;i<numOfclients;i++){
         if(clientsChatroom[i]==my_msg.subject){
 
@@ -79,11 +71,6 @@ int main(){
             msgsnd(idOfServer, &my_msg, sizeof(my_msg), 0);
         }
     }
-
     }
-
-
-
    }
-
 }
