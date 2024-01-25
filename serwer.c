@@ -66,6 +66,10 @@ int main(){
             numOfclients++;
     }
     }
+    else if(!strcmp(my_msg.text,"/block")){
+        my_msg.mtype =my_msg.subject;
+        msgsnd(idOfServer, &my_msg, sizeof(my_msg), 0);
+    }
     else{
         printf("else\n");
         for(int i=0;i<numOfclients;i++){
